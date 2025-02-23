@@ -1,0 +1,32 @@
+Spotify Wrapped:
+2024: 
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1FoTLRjY4LIe2k?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+2023:
+https://open.spotify.com/playlist/37i9dQZF1FaneOacH7F9SI?si=c9d2755db2ab4432
+2022:
+https://open.spotify.com/playlist/37i9dQZF1F0sijgNaJdgit?si=879f664d04af41e9
+2021:
+https://open.spotify.com/playlist/37i9dQZF1EUMDoJuT8yJsl?si=741877e0bfad4bc8
+2020:
+https://open.spotify.com/playlist/18M2L585q3qE71g7MUtAdq?si=847e2a10d2774b18
+2019:
+https://open.spotify.com/playlist/4zD1Y0h2qsycMeeRkd4AG7?si=141de879fdb04352
+can have the url (up until '?utm_source=generator') be replaced, have all playlist urls in a dictionary and cycle through them
+
+bigger picture ideas (maybe you should be taking care of yourself instead of looking at VS code)
+ - have 3 dictionaries, one for album and game and for spotify
+ - or game and album get their own template because they are the most similar
+ - dictionaries would contain the art link, the source link (ei bandcamp page or steam) and then a little writeup that could show up in a popup when clicking on the art
+ 
+
+albums 
+ https://glassbeach.bandcamp.com/album/plastic-death
+https://miraclemusical.bandcamp.com/album/hawaii-part-ii
+https://machinegirl.bandcamp.com/album/mg-ultra
+https://glassbeach.bandcamp.com/album/the-first-glass-beach-album
+https://www.generasia.com/wiki/Sigma_(REOL)
+https://open.spotify.com/album/3cN3mENkACWuRCDOuQUtfw
+https://glassbeach.bandcamp.com/album/alchemist-rats-beg-bashful-remixes
+https://open.spotify.com/album/25WsGwE3JFvkvTGgl0phYZ
+https://genius.com/albums/Tv-girl/French-exit
+https://open.spotify.com/album/4jyOxBxbP619pfXx6EI6lI

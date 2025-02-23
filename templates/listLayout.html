@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--https://chatgpt.com/share/67a0c918-a9c8-800c-9737-09c42bc42d13 this is the templete for the list page-->
+<!--https://media.discordapp.net/attachments/1265095271772065923/1337258014607933551/image.png?ex=67a6ca13&is=67a57893&hm=ae5f15fae14b046eb3cca3d6467a065c2b2f2c3c673dcd1f7e1f45d5a5d40bac&=&format=webp&quality=lossless&width=810&height=853(DOESNT WORK BECAUSE DISCORD WONT LET ME DO FREE FILE HOSTING)(WAAA MY FREE CHAT APP)--> 
+<!--Oh why oh why is the formating for the table different depending on screen size??? this shit is fucking wack-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "Spotify Songs" if source == "spotify" else "Steam Games" }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+         <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    </head>
+
+    <body>
+        <div class="topnav" id="myTopnav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('topAlbum') }}">Favorite Albums</a>
+            <a href="{{ url_for('topGame') }}">Favorite Games</a>
+            <a href="{{ url_for('spotifyWrapped') }}">Spotify Wrapped</a>
+            <a href="{{ url_for('allSong') }}">All Songs</a>
+            <a href="{{ url_for('allGame') }}">All Games</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+          
+          <div style="padding-left:16px">
+            <h2>{% block title %}{% endblock %}</h2>
+                
+          </div>
+
+          <h1>{{ "Spotify Songs" if source == "spotify" else "Steam Games" }}</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Release Date</th>
+                {% if source == "spotify" %}
+                    <th>Album Name</th>
+                    <th>Artist Name(s)</th>
+                {% else %}
+                    <th>Hours Played</th>
+                    <th>Metascore</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    <a href="{% if source == 'spotify' %}https://open.spotify.com/track/{{ item.id }}
+                             {% else %}https://store.steampowered.com/app/{{ item.id }}{% endif %}" target="_blank">
+                             <!--yay it works as intended but it makes the Nvidia app go crazy each time a new tab is opened so idk what weird gpu acceleration its trying to do to open a new tab this doesnt happen with other tabs in firefox. is it because the website is running locally? who knows!!! (it is not an issue with firefox becuase the same thing happens on chrome. I guess nvidia just doesn't like it because it cant run screencap on a protected app) -->
+                        {{ item.title }}
+                    </a>
+                </td>
+                <td>{{ item.release_date }}</td>
+                {% if source == "spotify" %}
+                    <td>{{ item.album }}</td>
+                    <td>{{ item.artist }}</td>
+                {% else %}
+                    <td>{{ item.hours }}</td>
+                    <td>{{ item.metascore }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+          <!--taken from W3Schools-->
+          <script>
+          function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+              x.className += " responsive";
+            } else {
+              x.className = "topnav";
+            }
+          }
+          </script>
+          
+          </body>
+</html>
+
+<!--https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_mobile_navbar-->
+
+<!--https://www.geeksforgeeks.org/how-toW-create-popup-box-using-html-and-css/  use for each page for the favorite-->
