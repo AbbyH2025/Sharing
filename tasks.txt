@@ -1,0 +1,10 @@
+import CSV data into database
+ - should behave exactly the same
+interact with database
+pull data from SpotifyAPI instead of static CSV
+
+
+*
+more perminint SQL-esq databases that dont disapear on each server instance
+*
+same thing for steam
