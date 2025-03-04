@@ -1,8 +1,11 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, request, redirect
 import json
 import csv
 import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timezone
+import sqlite_utils
 app = Flask(__name__)
 #https://csvjson.com/csv2json for my csv to json needs
 #https://chatgpt.com/share/67a0c918-a9c8-800c-9737-09c42bc42d13
@@ -15,6 +18,8 @@ app = Flask(__name__)
 #spotifyData = pd.read_csv('static/most_enjoyableplaylist.csv')
 #sortedSpotifyData = spotifyData.sort_values(by="Track Name")
 #print(sortedSpotifyData)
+
+
 
 def load_spotify_data():
     spotify_data = []
@@ -30,6 +35,7 @@ def load_spotify_data():
             })
     spotify_data.sort(key=lambda x: x["title"])
     return spotify_data
+
 
 
 
