@@ -6,6 +6,7 @@ import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 import sqlite_utils
+import sqlite3
 app = Flask(__name__)
 #https://csvjson.com/csv2json for my csv to json needs
 #https://chatgpt.com/share/67a0c918-a9c8-800c-9737-09c42bc42d13
@@ -69,6 +70,7 @@ def load_spotifyWrapped():
         spotifyWrapped = json.load(jsonfile)
     return spotifyWrapped
 
+
 #index route for web app
 @app.route("/") 
 def index():
@@ -97,4 +99,5 @@ def topGame():
     return render_template("gridLayout.html", items=load_top_game(), source="games")
 #finish this, need more routes for everything
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True, host='0.0.0.0')
