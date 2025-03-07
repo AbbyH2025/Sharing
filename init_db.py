@@ -1,53 +1,56 @@
-import sqlite3
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 import json
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+db = SQLAlchemy(app)
+
+class SpotifyData(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    release_date = db.Column(db.String, nullable=False)
+    album = db.Column(db.String, nullable=False)
+    artist = db.Column(db.String, nullable=False)
+
+class SteamData(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    release_date = db.Column(db.String, nullable=False)
+    hours = db.Column(db.Float, nullable=False)
+    metascore = db.Column(db.Integer, nullable=False)
+
 def init_db():
-    conn = sqlite3.connect('data.db')
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS spotify_data (
-            id TEXT PRIMARY KEY,
-            title TEXT,
-            release_date TEXT,
-            album TEXT,
-            artist TEXT
-        )
-    ''')
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS steam_data (
-            id TEXT PRIMARY KEY,
-            title TEXT,
-            release_date TEXT,
-            hours REAL,
-            metascore INTEGER
-        )
-    ''')
-    conn.commit()
-    conn.close()
+    db.create_all()
 
 def load_json_to_db():
-    conn = sqlite3.connect('data.db')
-    c = conn.cursor()
-#these json files are wrong, fix em
-    with open("static/topGame.json", "r", encoding="utf-8") as jsonfile:
+    with open("static/steam.json", "r", encoding="utf-8") as jsonfile:
         steam_data = json.load(jsonfile)
         for row in steam_data:
-            c.execute('''
-                INSERT OR REPLACE INTO steam_data (id, title, release_date, hours, metascore)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (row["id"], row["title"], row["release_date"], row["hours"], row["metascore"]))
+            steam_entry = SteamData(
+                id=row["id"],
+                title=row["title"],
+                release_date=row["release_date"],
+                hours=row["hours"],
+                metascore=row["metascore"]
+            )
+            db.session.add(steam_entry)
 
-    with open("static/SpotifyWrapped.", "r", encoding="utf-8") as jsonfile:
+    with open("static/spotify.json", "r", encoding="utf-8") as jsonfile:
         spotify_data = json.load(jsonfile)
         for row in spotify_data:
-            c.execute('''
-                INSERT OR REPLACE INTO spotify_data (id, title, release_date, album, artist)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (row["id"], row["title"], row["release_date"], row["album"], row["artist"]))
+            spotify_entry = SpotifyData(
+                id=row["id"],
+                title=row["title"],
+                release_date=row["release_date"],
+                album=row["album"],
+                artist=row["artist"]
+            )
+            db.session.add(spotify_entry)
 
-    conn.commit()
-    conn.close()
+    db.session.commit()
 
 if __name__ == '__main__':
-    init_db()
-    load_json_to_db()
+    with app.app_context():
+        init_db()
+        load_json_to_db()

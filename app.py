@@ -7,7 +7,12 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 import sqlite_utils
 import sqlite3
+from init_db import init_db, SpotifyData, SteamData  # Correct import statement
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+db = SQLAlchemy(app)
+
 #https://csvjson.com/csv2json for my csv to json needs
 #https://chatgpt.com/share/67a0c918-a9c8-800c-9737-09c42bc42d13
 # - I actually have no clue (this is a lie, I have an idea) whats going on and Im trying my best to hold this togeather but it feels like im spiderman keeping that train from falling off the tracks but im not spiderman im some 18yo tranny and Ive got shoestrings 
@@ -37,8 +42,9 @@ def load_spotify_data():
     spotify_data.sort(key=lambda x: x["title"])
     return spotify_data
 
-
-
+def load_spotify_data_from_db():
+    spotify_data = SpotifyData.query.order_by(SpotifyData.title).all()
+    return [{"id": item.id, "title": item.title, "release_date": item.release_date, "album": item.album, "artist": item.artist} for item in spotify_data]
 
 def load_steam_data():
     steam_data = []
@@ -54,6 +60,10 @@ def load_steam_data():
             })
     steam_data.sort(key=lambda x: x["hours"])
     return steam_data
+
+def load_steam_data_from_db():
+    steam_data = SteamData.query.order_by(SteamData.hours).all()
+    return [{"id": item.id, "title": item.title, "release_date": item.release_date, "hours": item.hours, "metascore": item.metascore} for item in steam_data]
 
 def load_top_game():
     with open("static/topGame.json", "r", encoding="utf-8") as jsonfile:
@@ -80,11 +90,11 @@ def index():
 
 @app.route("/allSong")
 def allSong():
-    return render_template("listLayout.html", items=load_spotify_data(), source="spotify")
+    return render_template("listLayout.html", items=load_spotify_data_from_db(), source="spotify")
 
 @app.route("/allGame")
 def allGame():
-    return render_template("listLayout.html", items=load_steam_data(), source="steam")
+    return render_template("listLayout.html", items=load_steam_data_from_db(), source="steam")
 
 @app.route("/spotifyWrapped")
 def spotifyWrapped():
@@ -99,5 +109,6 @@ def topGame():
     return render_template("gridLayout.html", items=load_top_game(), source="games")
 #finish this, need more routes for everything
 if __name__ == '__main__':
-    init_db()
+    with app.app_context():
+        init_db()
     app.run(debug=True, host='0.0.0.0')
